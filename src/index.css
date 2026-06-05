@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+@theme {
+  /* ---- Themeable Colors (overridden at runtime) ---- */
+  --color-th-base: #06080f;
+  --color-th-surface: #0a0d16;
+  --color-th-panel: #0f1219;
+  --color-th-elevated: #141822;
+  --color-th-line: #1c2333;
+  --color-th-line-hi: #2a3550;
+  --color-th-heading: #e8edf5;
+  --color-th-body: #c0c8d4;
+  --color-th-subtle: #94a3b8;
+  --color-th-dim: #64748b;
+  --color-th-accent: #22d3ee;
+  --color-th-accent-hi: #67e8f9;
+  --color-th-accent-lo: #06b6d4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-th-base);
+  color: var(--color-th-heading);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-th-line);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-th-line-hi);
+}
+
+/* Grid pattern - uses accent RGB vars */
+.bg-grid-tech {
+  background-image:
+    linear-gradient(rgba(var(--th-accent-r, 34), var(--th-accent-g, 211), var(--th-accent-b, 238), 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--th-accent-r, 34), var(--th-accent-g, 211), var(--th-accent-b, 238), 0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Effect: only show grid when fx-grid is on body */
+body:not(.fx-grid) .bg-grid-tech {
+  background-image: none;
+}
+
+/* Noise texture overlay */
+.noise-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.015;
+  pointer-events: none;
+  z-index: 100;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Effect: only show noise when fx-noise is on body */
+body:not(.fx-noise) .noise-overlay::before {
+  display: none;
+}
+
+/* Glow effects */
+.glow-accent {
+  box-shadow: 0 0 30px rgba(var(--th-accent-r, 34), var(--th-accent-g, 211), var(--th-accent-b, 238), 0.06), 0 0 60px rgba(var(--th-accent-r, 34), var(--th-accent-g, 211), var(--th-accent-b, 238), 0.03);
+}
+
+.glow-accent-sm {
+  box-shadow: 0 0 20px rgba(var(--th-accent-r, 34), var(--th-accent-g, 211), var(--th-accent-b, 238), 0.04);
+}
+
+/* Effect: only show glow when fx-glow is on body */
+body:not(.fx-glow) .glow-accent,
+body:not(.fx-glow) .glow-accent-sm {
+  box-shadow: none;
+}
+
+/* Top edge glow line */
+.edge-glow {
+  position: relative;
+}
+
+.edge-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(var(--th-accent-r, 34), var(--th-accent-g, 211), var(--th-accent-b, 238), 0.3), transparent);
+}
+
+/* Effect: only show edge glow when fx-edge-glow is on body */
+body:not(.fx-edge-glow) .edge-glow::before {
+  display: none;
+}
+
+/* Selection color */
+::selection {
+  background-color: rgba(var(--th-accent-r, 34), var(--th-accent-g, 211), var(--th-accent-b, 238), 0.2);
+  color: var(--color-th-heading);
+}
+
+/* Score ring animation */
+@keyframes score-in {
+  from {
+    stroke-dashoffset: 251.33;
+  }
+}
+
+/* Pulse ring for wooden fish */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.pulse-ring-anim {
+  animation: pulse-ring 0.6s ease-out forwards;
+}
+
+/* Float up animation */
+@keyframes float-up {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px) scale(1.2);
+  }
+}
+
+.float-up-anim {
+  animation: float-up 0.8s ease-out forwards;
+}
+
+@keyframes meritFloat {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(-50px) scale(1.1);
+  }
+}
+
+/* Subtle shine on cards */
+.card-shine {
+  background-image: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(var(--th-accent-r, 34), var(--th-accent-g, 211), var(--th-accent-b, 238), 0.015) 45%,
+    rgba(var(--th-accent-r, 34), var(--th-accent-g, 211), var(--th-accent-b, 238), 0.03) 50%,
+    rgba(var(--th-accent-r, 34), var(--th-accent-g, 211), var(--th-accent-b, 238), 0.015) 55%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  transition: background-position 0.6s ease;
+}
+
+.card-shine:hover {
+  background-position: -100% 0;
+}
+
+/* Effect: only show shine when fx-shine is on body */
+body:not(.fx-shine) .card-shine {
+  background-image: none;
+}
